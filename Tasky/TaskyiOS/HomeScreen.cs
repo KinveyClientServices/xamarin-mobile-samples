@@ -6,6 +6,11 @@ using MonoTouch.Dialog;
 using Tasky.Shared;
 using Tasky.ApplicationLayer;
 
+using Foundation;
+using KinveyXamarin;
+using KinveyXamariniOS;
+using System.Threading.Tasks;
+
 namespace Tasky.Screens {
 
 	/// <summary>
@@ -20,6 +25,9 @@ namespace Tasky.Screens {
 		TodoItemDialog taskDialog;
 		TodoItem currentItem;
 		DialogViewController detailsScreen;
+
+
+		private Client kinveyClient;
 
 		public HomeScreen () : base (UITableViewStyle.Plain, null)
 		{
@@ -61,14 +69,27 @@ namespace Tasky.Screens {
 		public override void ViewWillAppear (bool animated)
 		{
 			base.ViewWillAppear (animated);
-			
+
+			//** KINVEY CODE FOR AZURE LOGIN
+			kinveyClient = ((AppDelegate)UIApplication.SharedApplication.Delegate).kinveyClient;
+			kinveyClient.User ().Logout ();
+			kinveyClient.User().setMICApiVersion("v2");
+			kinveyClient.User().LoginWithAuthorizationCodeLoginPage("evolveDemoURI://", new KinveyMICDelegate<User>{
+				onSuccess = (user) => { Console.WriteLine ("logged in as: " + kinveyClient.User().Attributes["_socialIdentity"]["kinveyAuth"]["id"]); PopulateTable(); },
+				onError = (error)  => { Console.WriteLine ("something went wrong: " + error.ToString()); },
+				OnReadyToRender = (url) => { UIApplication.SharedApplication.OpenUrl(new NSUrl(url)); }				
+			});
+			//** KINVEY CODE
+
 			// reload/refresh
-			PopulateTable();			
+			//PopulateTable();			
 		}
-		
-		protected void PopulateTable()
+
+
+		protected async void PopulateTable()
 		{
-			tasks = TodoItemManager.GetTasks().ToList ();
+			//tasks = TodoItemManager.GetTasks().ToList ();
+			tasks = (await TodoItemManager.GetKTasks ()).ToList();
 //			var rows = from t in tasks
 //				select (Element)new StringElement ((t.Name == "" ? "<new task>" : t.Name), t.Notes);
 			// TODO: use this element, which displays a 'tick' when item is completed
@@ -76,7 +97,9 @@ namespace Tasky.Screens {
 				select (Element)new CheckboxElement ((t.Name == "" ? "<new task>" : t.Name), t.Done);
 			var s = new Section ();
 			s.AddAll(rows);
-			Root = new RootElement("Tasky") {s}; 
+			InvokeOnMainThread (() => {
+				Root = new RootElement ("Tasky") { s };
+			});
 		}
 		public override void Selected (Foundation.NSIndexPath indexPath)
 		{

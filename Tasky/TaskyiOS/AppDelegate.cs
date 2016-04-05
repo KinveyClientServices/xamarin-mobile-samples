@@ -4,6 +4,10 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
+using KinveyXamarin;
+using KinveyXamariniOS;
+using SQLite.Net.Platform.XamarinIOS;
+
 namespace Tasky 
 {
 	public class Application 
@@ -24,6 +28,9 @@ namespace Tasky
 		UIWindow window;
 		UINavigationController navController;
 		UITableViewController homeViewController;
+
+		// class-level declarations
+		public Client kinveyClient { get; set; }
 
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
@@ -60,8 +67,21 @@ namespace Tasky
 			navController.PushViewController(homeViewController, false);
 			window.RootViewController = navController;
 			window.MakeKeyAndVisible ();
-			
+
+
+			// Initialize Kinvey
+			kinveyClient = new Client.Builder ("kid_byfrNtj50x", "8f8a1d57e1a642309eaf6c9a3740ec20")
+				.setLogger(delegate(string msg) { Console.WriteLine("KINVEY: "+msg);})
+				.setFilePath(NSFileManager.DefaultManager.GetUrls (NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User) [0].ToString())
+				.setOfflinePlatform(new SQLitePlatformIOS())
+				.build();
+
+
 			return true;
+		}
+
+		public override bool OpenUrl (UIApplication application, NSUrl url, string sourceApplication, NSObject annotation){
+			return kinveyClient.User ().OnOAuthCallbackRecieved (url);
 		}
 	}
 }
