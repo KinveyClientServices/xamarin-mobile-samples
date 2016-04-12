@@ -26,7 +26,6 @@ namespace Tasky.Shared
 		public static TodoItem GetTask(int id)
 		{
 			return TodoItemRepositoryADO.GetTask(id);
-			//return kinveyClient
 		}
 
 		// OLD CLASS TO GET TASKS

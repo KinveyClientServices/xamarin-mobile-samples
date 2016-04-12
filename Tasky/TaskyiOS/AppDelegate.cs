@@ -70,7 +70,7 @@ namespace Tasky
 
 
 			// Initialize Kinvey
-			kinveyClient = new Client.Builder ("kid_byfrNtj50x", "8f8a1d57e1a642309eaf6c9a3740ec20")
+			kinveyClient = new Client.Builder ("kid_b1QhapOlbb", "921d816807e845e39e75e391d90829c9")
 				.setLogger(delegate(string msg) { Console.WriteLine("KINVEY: "+msg);})
 				.setFilePath(NSFileManager.DefaultManager.GetUrls (NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User) [0].ToString())
 				.setOfflinePlatform(new SQLitePlatformIOS())

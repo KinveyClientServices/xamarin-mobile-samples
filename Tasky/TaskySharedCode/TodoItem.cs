@@ -13,13 +13,10 @@ namespace Tasky.Shared
 		public TodoItem ()
 		{
 		}
-		public string _id;
-		[JsonProperty("intId")]
-        public int ID { get; set; }
-		[JsonProperty("action")]
-		public string Name { get; set; }
-		[JsonProperty("Title")]
-		public string Notes { get; set; }
-		public bool Done { get; set; }	// TODO: add this field to the user-interface
+		[JsonProperty] public string _id;
+		[JsonProperty] public int ID { get; set; }
+		[JsonProperty] public string Name { get; set; }
+		[JsonProperty] public string Notes { get; set; }
+		[JsonProperty] public bool Done { get; set; }	// TODO: add this field to the user-interface
 	}
 }
