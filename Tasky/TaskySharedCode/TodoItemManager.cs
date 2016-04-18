@@ -33,38 +33,26 @@ namespace Tasky.Shared
 			return TodoItemRepositoryADO.GetTask(id);
 			//return await kinveyStore.GetEntityAsync(id.ToString());
 		}
-/*		public async static Task<TodoItem> GetKTask(int id)
-		{
-		}
-*/
+
 		public async static Task<IList<TodoItem>> GetTasks ()
 		{
 			return new List<TodoItem>(TodoItemRepositoryADO.GetTasks());
 			//return new List<TodoItem>(await kinveyStore.GetAsync());
 		}
-/*		public async static Task<IList<TodoItem>> GetKTasks ()
-		{
-		}		
-*/
+
 		public async static Task<int> SaveTask (TodoItem item)
 		{
 			return TodoItemRepositoryADO.SaveTask(item);
 			//return (await kinveyStore.SaveAsync(item)).ID;
 		}
-/*		public async static Task<int> SaveKTask (TodoItem item)
-		{
-		}
-*/
+
 		public async static Task<int> DeleteTask(int id)
 		{
 			return TodoItemRepositoryADO.DeleteTask(id);
 			//await kinveyStore.DeleteAsync(id.ToString());
 			//return 0;
 		}
-/*		public async static Task<int> DeleteKTask(int id)
-		{
-		}	
-*/
+
 
 	}
 }
