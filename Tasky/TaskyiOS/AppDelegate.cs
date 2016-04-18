@@ -46,19 +46,10 @@ namespace Tasky
 			// create our Todo list screen
 			homeViewController = new Screens.HomeScreen ();
 
-
-//			UIApplication.SharedApplication.KeyWindow.TintColor = UIColor.White;
-//			navController.NavigationBar.BarTintColor = UIColor.FromRGB (0x91, 0xCA, 0x47);
-			// green theme
-
-//			navController.NavigationBar.TintColor = UIColor.White;
-//			navController.NavigationBar.BarTintColor = UIColor.FromRGB (0x6F, 0xA2, 0x2E);
-
 			navController.NavigationBar.TintColor = UIColor.FromRGB (0x6F, 0xA2, 0x2E); // 6FA22E dark-green
 			navController.NavigationBar.BarTintColor = UIColor.FromRGB (0xCF, 0xEF, 0xA7); // CFEFA7 light-green
 
 			UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes() {
-//				TextColor = UIColor.White,
 				TextColor = UIColor.FromRGB (0x6F, 0xA2, 0x2E), // 6FA22E dark-green
 				TextShadowColor = UIColor.Clear
 			}); 
@@ -68,20 +59,24 @@ namespace Tasky
 			window.RootViewController = navController;
 			window.MakeKeyAndVisible ();
 
-
+			//***************************************************************
 			// Initialize Kinvey
 			kinveyClient = new Client.Builder ("kid_b1QhapOlbb", "921d816807e845e39e75e391d90829c9")
 				.setLogger(delegate(string msg) { Console.WriteLine("KINVEY: "+msg);})
 				.setFilePath(NSFileManager.DefaultManager.GetUrls (NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User) [0].ToString())
 				.setOfflinePlatform(new SQLitePlatformIOS())
 				.build();
-
+			//***************************************************************
 
 			return true;
 		}
 
+		// ***********************
+		// handler for OAuth callback
 		public override bool OpenUrl (UIApplication application, NSUrl url, string sourceApplication, NSObject annotation){
 			return kinveyClient.User ().OnOAuthCallbackRecieved (url);
 		}
+		// ************************
+
 	}
 }

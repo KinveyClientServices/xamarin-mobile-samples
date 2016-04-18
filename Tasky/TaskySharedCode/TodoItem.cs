@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+
 using KinveyXamarin;  //*** ADD KINVEY SDK
 
 namespace Tasky.Shared 
@@ -13,6 +14,9 @@ namespace Tasky.Shared
 		public TodoItem ()
 		{
 		}
+		// ************
+		// add [JsonProperty] to class to connect Kinvey cloud datastore
+		// ************
 		[JsonProperty] public string _id;
 		[JsonProperty] public int ID { get; set; }
 		[JsonProperty] public string Name { get; set; }
