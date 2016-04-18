@@ -5,11 +5,11 @@ using UIKit;
 using MonoTouch.Dialog;
 using Tasky.Shared;
 using Tasky.ApplicationLayer;
-
-using Foundation;
-using KinveyXamarin;
-using KinveyXamariniOS;
 using System.Threading.Tasks;
+using Foundation;
+
+//using KinveyXamarin;
+//using KinveyXamariniOS;
 
 namespace Tasky.Screens {
 
@@ -26,8 +26,9 @@ namespace Tasky.Screens {
 		TodoItem currentItem;
 		DialogViewController detailsScreen;
 
-
-		private Client kinveyClient;
+		// ***************
+        // initialize high-level Kinvey object
+		//private Client kinveyClient;
 
 		public HomeScreen () : base (UITableViewStyle.Plain, null)
 		{
@@ -56,13 +57,15 @@ namespace Tasky.Screens {
 			currentItem.Notes = taskDialog.Notes;
 			// TODO: show the completion status in the UI
 			currentItem.Done = taskDialog.Done;
-			TodoItemManager.SaveTask(currentItem);
+			TodoItemManager.SaveTask(currentItem); // *** original
+			//TodoItemManager.SaveKTask(currentItem); // *** kinvey
 			NavigationController.PopViewController (true);
 		}
 		public void DeleteTask ()
 		{
 			if (currentItem.ID >= 0)
-				TodoItemManager.DeleteTask (currentItem.ID);
+				TodoItemManager.DeleteTask (currentItem.ID);   // *** original 
+				//TodoItemManager.DeleteKTask (currentItem.ID);  // *** kinvey
 			NavigationController.PopViewController (true);
 		}
 
@@ -70,29 +73,38 @@ namespace Tasky.Screens {
 		{
 			base.ViewWillAppear (animated);
 
+			//***************************************************************************************
 			//** KINVEY CODE FOR AZURE LOGIN
-			kinveyClient = ((AppDelegate)UIApplication.SharedApplication.Delegate).kinveyClient;
-			kinveyClient.User ().Logout ();
-			kinveyClient.User().setMICApiVersion("v2");
-			kinveyClient.User().LoginWithAuthorizationCodeLoginPage("evolveDemoURI://", new KinveyMICDelegate<User>{
-				onSuccess = (user) => { Console.WriteLine ("logged in as: " + kinveyClient.User().Attributes["_socialIdentity"]["kinveyAuth"]["id"]); PopulateTable(); },
-				onError = (error)  => { Console.WriteLine ("something went wrong: " + error.ToString()); },
-				OnReadyToRender = (url) => { UIApplication.SharedApplication.OpenUrl(new NSUrl(url)); }				
-			});
-			//** KINVEY CODE
-
-			// reload/refresh
-			//PopulateTable();			
+/*			kinveyClient = ((AppDelegate)UIApplication.SharedApplication.Delegate).kinveyClient;
+			if (!kinveyClient.User ().isUserLoggedIn ()) {
+				kinveyClient.User ().setMICApiVersion ("v2");
+				kinveyClient.User ().LoginWithAuthorizationCodeLoginPage ("evolveDemoURI://", new KinveyMICDelegate<User> {
+					onSuccess = (user) => {
+						Console.WriteLine ("logged in as: " + kinveyClient.User ().Attributes ["_socialIdentity"] ["kinveyAuth"] ["id"]);
+						PopulateTable ();
+					},
+					onError = (error) => {
+						Console.WriteLine ("something went wrong: " + error.ToString ());
+					},
+					OnReadyToRender = (url) => {
+						UIApplication.SharedApplication.OpenUrl (new NSUrl (url));
+					}				
+				});
+			} 
+			else 
+*/			//***************************************************************************************
+			{
+				// reload/refresh
+				PopulateTable ();
+			}
 		}
 
 
 		protected async void PopulateTable()
 		{
-			//tasks = TodoItemManager.GetTasks().ToList ();
-			tasks = (await TodoItemManager.GetKTasks ()).ToList();
-//			var rows = from t in tasks
-//				select (Element)new StringElement ((t.Name == "" ? "<new task>" : t.Name), t.Notes);
-			// TODO: use this element, which displays a 'tick' when item is completed
+			tasks = (await TodoItemManager.GetTasks()).ToList ();        // *** original
+			//tasks = (await TodoItemManager.GetKTasks()).ToList();  // *** kinvey
+
 			var rows = from t in tasks
 				select (Element)new CheckboxElement ((t.Name == "" ? "<new task>" : t.Name), t.Done);
 			var s = new Section ();
@@ -112,7 +124,8 @@ namespace Tasky.Screens {
 		}
 		public void DeleteTaskRow(int rowId)
 		{
-			TodoItemManager.DeleteTask(tasks[rowId].ID);
+			TodoItemManager.DeleteTask(tasks[rowId].ID);   // *** original
+			//TodoItemManager.DeleteKTask(tasks[rowId].ID);    // *** kinvey
 		}
 	}
 }

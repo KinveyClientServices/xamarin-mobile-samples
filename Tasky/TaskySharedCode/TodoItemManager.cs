@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-
-using KinveyXamarin;
-using KinveyXamariniOS;
 using UIKit;
 using System.Threading.Tasks;
+
+//using KinveyXamarin;
+//using KinveyXamariniOS;
 
 namespace Tasky.Shared 
 {
@@ -13,41 +13,58 @@ namespace Tasky.Shared
 	/// </summary>
 	public class TodoItemManager 
 	{
+		// ******************
 		// add kinveyClient object
-		public static Client kinveyClient { get; set; }
+/*		public static Client kinveyClient { get; set; }
 		public static AsyncAppData<TodoItem> kinveyStore;
+*/		// ******************
 
 		static TodoItemManager ()
 		{
-			kinveyClient = ((AppDelegate)UIApplication.SharedApplication.Delegate).kinveyClient;
+			// **********************************
+			// initialize data store links
+/*			kinveyClient = ((AppDelegate)UIApplication.SharedApplication.Delegate).kinveyClient;
 			kinveyStore = kinveyClient.AppData<TodoItem> ("todo", typeof(TodoItem));
+*/			// **********************************
 		}
 		
-		public static TodoItem GetTask(int id)
+		public async static Task<TodoItem> GetTask(int id)
 		{
 			return TodoItemRepositoryADO.GetTask(id);
+			//return await kinveyStore.GetEntityAsync(id.ToString());
 		}
-
-		// OLD CLASS TO GET TASKS
-		public static IList<TodoItem> GetTasks ()
+/*		public async static Task<TodoItem> GetKTask(int id)
+		{
+		}
+*/
+		public async static Task<IList<TodoItem>> GetTasks ()
 		{
 			return new List<TodoItem>(TodoItemRepositoryADO.GetTasks());
+			//return new List<TodoItem>(await kinveyStore.GetAsync());
 		}
-
-		// NEW KINVEY METHOD TO GET TASKS
-		public async static Task<IList<TodoItem>> GetKTasks ()
+/*		public async static Task<IList<TodoItem>> GetKTasks ()
 		{
-			return new List<TodoItem>(await kinveyStore.GetAsync());
 		}		
-
-		public static int SaveTask (TodoItem item)
+*/
+		public async static Task<int> SaveTask (TodoItem item)
 		{
 			return TodoItemRepositoryADO.SaveTask(item);
+			//return (await kinveyStore.SaveAsync(item)).ID;
 		}
-		
-		public static int DeleteTask(int id)
+/*		public async static Task<int> SaveKTask (TodoItem item)
+		{
+		}
+*/
+		public async static Task<int> DeleteTask(int id)
 		{
 			return TodoItemRepositoryADO.DeleteTask(id);
+			//await kinveyStore.DeleteAsync(id.ToString());
+			//return 0;
 		}
+/*		public async static Task<int> DeleteKTask(int id)
+		{
+		}	
+*/
+
 	}
 }
