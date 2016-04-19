@@ -1,8 +1,6 @@
 using System;
 using Newtonsoft.Json;
 
-//using KinveyXamarin;  //*** ADD KINVEY SDK
-
 namespace Tasky.Shared 
 {
 	/// <summary>

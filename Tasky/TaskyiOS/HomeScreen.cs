@@ -28,7 +28,7 @@ namespace Tasky.Screens {
 
 		// ***************
         // initialize high-level Kinvey object
-		//private Client kinveyClient;
+//		private Client kinveyClient;
 
 		public HomeScreen () : base (UITableViewStyle.Plain, null)
 		{
@@ -57,15 +57,13 @@ namespace Tasky.Screens {
 			currentItem.Notes = taskDialog.Notes;
 			// TODO: show the completion status in the UI
 			currentItem.Done = taskDialog.Done;
-			TodoItemManager.SaveTask(currentItem); // *** original
-			//TodoItemManager.SaveKTask(currentItem); // *** kinvey
+			TodoItemManager.SaveTask(currentItem);
 			NavigationController.PopViewController (true);
 		}
 		public void DeleteTask ()
 		{
 			if (currentItem.ID >= 0)
-				TodoItemManager.DeleteTask (currentItem.ID);   // *** original 
-				//TodoItemManager.DeleteKTask (currentItem.ID);  // *** kinvey
+				TodoItemManager.DeleteTask (currentItem.ID);
 			NavigationController.PopViewController (true);
 		}
 
@@ -102,8 +100,7 @@ namespace Tasky.Screens {
 
 		protected async void PopulateTable()
 		{
-			tasks = (await TodoItemManager.GetTasks()).ToList ();        // *** original
-			//tasks = (await TodoItemManager.GetKTasks()).ToList();  // *** kinvey
+			tasks = (await TodoItemManager.GetTasks()).ToList ();
 
 			var rows = from t in tasks
 				select (Element)new CheckboxElement ((t.Name == "" ? "<new task>" : t.Name), t.Done);
@@ -124,8 +121,7 @@ namespace Tasky.Screens {
 		}
 		public void DeleteTaskRow(int rowId)
 		{
-			TodoItemManager.DeleteTask(tasks[rowId].ID);   // *** original
-			//TodoItemManager.DeleteKTask(tasks[rowId].ID);    // *** kinvey
+			TodoItemManager.DeleteTask(tasks[rowId].ID);
 		}
 	}
 }
