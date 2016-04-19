@@ -1,3 +1,4 @@
+#pragma warning disable 4014
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,26 +72,21 @@ namespace Tasky.Screens {
 		{
 			base.ViewWillAppear (animated);
 
-			//***************************************************************************************
-			//** KINVEY CODE FOR AZURE LOGIN
+			// ***************************************************************************************
+			// * KINVEY CODE FOR AZURE LOGIN
+			//
 /*			kinveyClient = ((AppDelegate)UIApplication.SharedApplication.Delegate).kinveyClient;
 			if (!kinveyClient.User ().isUserLoggedIn ()) {
 				kinveyClient.User ().setMICApiVersion ("v2");
+
 				kinveyClient.User ().LoginWithAuthorizationCodeLoginPage ("evolveDemoURI://", new KinveyMICDelegate<User> {
-					onSuccess = (user) => {
-						Console.WriteLine ("logged in as: " + kinveyClient.User ().Attributes ["_socialIdentity"] ["kinveyAuth"] ["id"]);
-						PopulateTable ();
-					},
-					onError = (error) => {
-						Console.WriteLine ("something went wrong: " + error.ToString ());
-					},
-					OnReadyToRender = (url) => {
-						UIApplication.SharedApplication.OpenUrl (new NSUrl (url));
-					}				
+					onSuccess      = (user) => { Console.WriteLine ("logged in as: " + kinveyClient.User ().Attributes ["_socialIdentity"] ["kinveyAuth"] ["id"]); PopulateTable (); },
+					onError       = (error) => { Console.WriteLine ("something went wrong: " + error.ToString ());	},
+					OnReadyToRender = (url) => { UIApplication.SharedApplication.OpenUrl (new NSUrl (url)); }
 				});
 			} 
 			else 
-*/			//***************************************************************************************
+*/			// ***************************************************************************************
 			{
 				// reload/refresh
 				PopulateTable ();

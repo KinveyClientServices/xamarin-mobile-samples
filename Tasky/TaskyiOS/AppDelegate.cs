@@ -34,6 +34,16 @@ namespace Tasky
 
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
+
+			//***************************************************************
+			// Initialize Kinvey
+/*			kinveyClient = new Client.Builder ("kid_b1QhapOlbb", "921d816807e845e39e75e391d90829c9")
+				.setLogger(delegate(string msg) { Console.WriteLine("KINVEY: "+msg);})
+				.setFilePath(NSFileManager.DefaultManager.GetUrls (NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User) [0].ToString())
+				.setOfflinePlatform(new SQLitePlatformIOS())
+				.build();
+*/			//***************************************************************
+
 			// create a new window instance based on the screen size
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 			
@@ -59,24 +69,16 @@ namespace Tasky
 			window.RootViewController = navController;
 			window.MakeKeyAndVisible ();
 
-			//***************************************************************
-			// Initialize Kinvey
-/*			kinveyClient = new Client.Builder ("kid_b1QhapOlbb", "921d816807e845e39e75e391d90829c9")
-				.setLogger(delegate(string msg) { Console.WriteLine("KINVEY: "+msg);})
-				.setFilePath(NSFileManager.DefaultManager.GetUrls (NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User) [0].ToString())
-				.setOfflinePlatform(new SQLitePlatformIOS())
-				.build();
-*/			//***************************************************************
-
 			return true;
 		}
 
 		// ***********************
 		// handler for OAuth callback
-/*		public override bool OpenUrl (UIApplication application, NSUrl url, string sourceApplication, NSObject annotation){
-			return kinveyClient.User ().OnOAuthCallbackRecieved (url);
+		public override bool OpenUrl (UIApplication application, NSUrl url, string sourceApplication, NSObject annotation){
+//			return kinveyClient.User ().OnOAuthCallbackRecieved (url);
+			return true;
 		}
-*/		// ************************
+		// ************************
 
 	}
 }
