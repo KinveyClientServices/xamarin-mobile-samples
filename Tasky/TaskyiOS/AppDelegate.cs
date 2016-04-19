@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Foundation;
 using UIKit;
+using SQLite.Net.Platform.XamarinIOS;
 
 //using KinveyXamarin;
 //using KinveyXamariniOS;
-//using SQLite.Net.Platform.XamarinIOS;
 
 namespace Tasky 
 {
